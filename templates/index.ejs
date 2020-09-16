@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Embedded Test</title>
+        
+        <!-- <style> -->
+        <!-- Define SignatureContainer which is the container embedded document will be rendered in-->
+        
+        <!-- div {
+            margin-bottom: 10px; 
+        }
+        div#signatureContainer {
+            width: 80%; 
+            height: 100%; 
+            border: 1px solid #0ae00a; 
+            background-color: aquamarine;
+        }
+        </style> -->
+
+        <!-- import Hellosign embedded via CDN -->
+        <script src="https://cdn.hellosign.com/public/js/embedded/v2.0.0/embedded.production.min.js"></script>
+
+    </head>
+    
+    <body>
+        <h1>Hello API Event Received</h1>
+        <div id="signatureContainer"></div>
+    </body>
+
+    
+    <script>
+        const sign_url = "<%= sign_url %>";
+        const edit_url = "<%= edit_url %>";       
+        const claim_url = "<%= claim_url %>";
+
+        [sign_url, edit_url, claim_url].forEach(element => {
+            if (element.includes("https://")) {
+                send_url = element
+            }
+        });
+
+        console.log(send_url)
+        send_url = send_url.replace(/&amp;/g, "&")
+        console.log(send_url)
+
+
+        const client = new HelloSign({
+        clientId: "<%= client_id %>"
+        }); 
+
+        client.open(send_url, {   
+            allowCancel: true,
+            testMode: true,
+            skipDomainVerification: true, 
+            debug: true
+            // container: document.getElementById("signatureContainer")
+        });
+
+    </script>
+
+</html>
+
