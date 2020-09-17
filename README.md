@@ -2,7 +2,7 @@
 
 ## usage:
 
-### >> node app.js send
+`### >> node app.js send`
 Send a signature request using a local file
 
 ### >> node app.js send template
