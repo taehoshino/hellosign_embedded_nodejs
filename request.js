@@ -1,4 +1,4 @@
-const {api_key, client_id} = require("./config")
+const {api_key, client_id, signer_email} = require("./config")
 const hellosign = require("hellosign-sdk")({key: api_key})
 const chalk = require("chalk")
 
@@ -129,7 +129,7 @@ const create_unclaimed_draft_with_template = (template_id, email_address, callba
         requester_email_address: email_address, 
         signers: [{
             role: "Signer", 
-            email_address: "SIGNER_EMAIL_ADDRESS", 
+            email_address: signer_email, 
             name: "Willy Williams"
         }], 
         is_for_embedded_signing: 0

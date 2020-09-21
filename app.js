@@ -5,7 +5,7 @@ const morgan = require("morgan")
 const path = require("path")
 const chalk = require("chalk")
 const {send_signature_request, send_signature_request_with_template, create_template_draft, create_unclaimed_draft, create_unclaimed_draft_with_template} = require("./request")
-const {client_id} = require("./config")
+const {client_id, signer_email, requester_email, template_id} = require("./config")
 
 // assign variables to user input
 const command = process.argv[2]
@@ -31,14 +31,14 @@ var claim_url = undefined
 // call functions based on user input
 if (command === "send") {
     if (opt === "template") {
-        send_signature_request_with_template("TEMPLATE_ID", "SIGNER_EMAIL_ADDRESS", (sign_url = undefined)=>{
+        send_signature_request_with_template(template_id, signer_email, (sign_url = undefined)=>{
             app.get("/", (req, res)=>{
                 return res.render("index", {client_id, sign_url, edit_url, claim_url})
             })
         })
 
     } else {
-        send_signature_request("SIGNER_EMAIL_ADDRESS", (sign_url = undefined)=>{
+        send_signature_request(signer_email, (sign_url = undefined)=>{
             app.get("/", (req, res)=>{
                 return res.render("index", {client_id, sign_url, edit_url, claim_url})
             })        
@@ -48,14 +48,14 @@ if (command === "send") {
 
 } else if (command === "unclaimed") {
     if (opt === "template") {
-        create_unclaimed_draft_with_template("TEMPLATE_ID", "REQUESTER_EMAIL_ADDRESS", (claim_url = undefined)=>{
+        create_unclaimed_draft_with_template(template_id, requester_email, (claim_url = undefined)=>{
             app.get("/", (req, res)=>{
                 return res.render("index", {client_id, sign_url, edit_url, claim_url})
         })
         })
 
     } else {
-        create_unclaimed_draft("REQUESTER_EMAIL_ADDRESS", (claim_url = undefined)=>{
+        create_unclaimed_draft(requester_email, (claim_url = undefined)=>{
             app.get("/", (req, res) => {
                 return res.render("index", {client_id, sign_url, edit_url, claim_url})
             })
@@ -71,11 +71,14 @@ if (command === "send") {
     })
     
 } else {
-    console.log(chalk.red.inverse("Invalid command value!"))
+    // console.log(chalk.red.inverse("Invalid command value!"))
+    app.get("/", (req,res)=>{
+        return res.render("index", {client_id, sign_url, edit_url, claim_url})
+    })
 }
 
 
 
 // instantiate local server at port 3000
 const server = http.createServer(app)
-server.listen(3000)
+server.listen(5000)

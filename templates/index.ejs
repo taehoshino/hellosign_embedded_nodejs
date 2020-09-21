@@ -2,60 +2,116 @@
 <html>
     <head>
         <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <title>Embedded Test</title>
-        
-        <!-- <style> -->
-        <!-- Define SignatureContainer which is the container embedded document will be rendered in-->
-        
-        <!-- div {
-            margin-bottom: 10px; 
-        }
-        div#signatureContainer {
-            width: 80%; 
-            height: 100%; 
-            border: 1px solid #0ae00a; 
-            background-color: aquamarine;
-        }
-        </style> -->
+        <style>
+            .submenu h3 {
+                margin: 0 0 lem 0;
+                font-size: 20px;
+                cursor: pointer;
+                color: lightseagreen;
+            }
+            .submenu h3:hover {
+                color: blue;
+                text-decoration: underline; 
+            }
+            .submenu ul {
+                margin: 0 0 lem 0; 
+                list-style-type: circle;
+                font-size: 18px;
+                color: lightsalmon; 
+            }
+            .url {
+                font-size: 14px;
+                font-family: sans-serif;
+                background-color: lightsteelblue;
+                color: darkblue;
+            }
+
+            .hidden {
+                display: none;
+            }
+        </style>
 
         <!-- import Hellosign embedded via CDN -->
         <script src="https://cdn.hellosign.com/public/js/embedded/v2.0.0/embedded.production.min.js"></script>
+        <!-- import JQuery via CDN -->        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+                integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+                crossorigin="anonymous"></script>
 
     </head>
     
     <body>
         <h1>Hello API Event Received</h1>
         <div id="signatureContainer"></div>
+
+        <section>
+            <div class="sidebar">
+                <div class="submenu">
+                    <h3>Request Options</h3>
+                    <ul class="hidden" id="list">
+                    </ul>
+    
+                </div>
+            </div>
+        </section>
+    
     </body>
 
-    
     <script>
-        const sign_url = "<%= sign_url %>";
-        const edit_url = "<%= edit_url %>";       
-        const claim_url = "<%= claim_url %>";
+        const url_list = ["<%= sign_url %>", "<%= edit_url %>", "<%= claim_url %>"]; 
 
-        [sign_url, edit_url, claim_url].forEach(element => {
-            if (element.includes("https://")) {
-                send_url = element
+        for (var i=0; i<url_list.length; i++) {
+            console.log(i);
+            if (url_list[i].includes("https://")) {
+                send_url = url_list[i]; 
+                break; 
             }
-        });
-
-        console.log(send_url)
+        }
         send_url = send_url.replace(/&amp;/g, "&")
-        console.log(send_url)
 
+        $(document).ready(function(){
+            
+            $('.submenu h3').on('click', function(){
+                $(this).next().toggleClass('hidden');
+            });
 
-        const client = new HelloSign({
-        clientId: "<%= client_id %>"
-        }); 
+            var li = document.createElement('li');
+            var btn = $('<input/>').attr({type: 'button', id: 'btnRender'});
 
-        client.open(send_url, {   
-            allowCancel: true,
-            testMode: true,
-            skipDomainVerification: true, 
-            debug: true
-            // container: document.getElementById("signatureContainer")
+            if (i===0){
+                li.textContent = "Signature request - Sign URL: " + send_url; 
+                btn.attr({value: "Sign Now!"});
+            } else if (i===1) {
+                li.textContent = "Create template - Edit URL: " + send_url; 
+                btn.attr({value: "Create Template Now!"});
+            } else {
+                li.textContent = "Unclaimed draft - Claim URL: " + send_url; 
+                btn.attr({value: "Send Request Now!"});
+            }
+            document.getElementById('list').appendChild(li);
+            $('#list').append(btn);
+
+            $('#btnRender').click(function(){
+                const client = new HelloSign({
+                clientId: "<%= client_id %>"
+                }); 
+
+            client.open(send_url, {   
+                allowCancel: true,
+                testMode: true,
+                skipDomainVerification: true, 
+                debug: true
+                // container: document.getElementById("signatureContainer")
+                });
+
+            })
+ 
         });
+
+
 
     </script>
 
