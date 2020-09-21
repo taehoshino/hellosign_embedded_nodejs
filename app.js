@@ -71,14 +71,11 @@ if (command === "send") {
     })
     
 } else {
-    // console.log(chalk.red.inverse("Invalid command value!"))
-    app.get("/", (req,res)=>{
-        return res.render("index", {client_id, sign_url, edit_url, claim_url})
-    })
+    console.log(chalk.red.inverse("Invalid command value!"))
 }
 
 
 
-// instantiate local server at port 3000
+// instantiate local server at port 5000
 const server = http.createServer(app)
 server.listen(5000)
