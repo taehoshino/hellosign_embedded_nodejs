@@ -1,0 +1,40 @@
+body {
+    color: #333333;
+    font-family: arial;
+    max-width: 650px;
+    margin: 0 auto; 
+    padding: 0 16px;
+    background-color: azure;
+}
+
+footer {
+    color: #888888;
+    border-top: 1px solid #eeeeee;
+    margin-top: 16px;
+    padding: 16px 0;
+}
+
+h1 {
+    font-size: 48px;
+    margin-bottom: 16px; 
+    color: azure;
+}
+
+h3 {
+    color: #888888;
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.submenu h3:hover {
+    color: #333333;
+}
+
+.submenu ul {
+    color: #888888;
+    font-size: 20px;
+}
+
+.hidden {
+    display: none;
+}

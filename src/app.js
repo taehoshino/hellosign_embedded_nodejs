@@ -18,7 +18,10 @@ const app = express()
 app.use(morgan("combined"))
 
 // set templates folder
-app.set("views", path.join(__dirname, "templates"))
+app.set("views", path.join(__dirname, "../templates"))
+
+// setup static directory to serve
+app.use(express.static(path.join(__dirname, "../public")))
 
 // set view engine
 app.set("view engine", "ejs")
@@ -72,6 +75,9 @@ if (command === "send") {
     
 } else {
     console.log(chalk.red.inverse("Invalid command value!"))
+    app.get("/", (req, res)=>{
+        return res.render("index", {client_id, sign_url, edit_url, claim_url})
+    })
 }
 
 
