@@ -4,8 +4,7 @@
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/css/style.css">
-
-
+        <link rel="icon", href="/img/icon.jpeg">
         <title>Hellosign Testing Tool</title>
 
         <!-- import Hellosign embedded via CDN -->
@@ -24,29 +23,25 @@
 
     </head>
     
-    <body>
-        <!-- <div id="signatureContainer"></div> -->
+    <body>    
+        <div class="main-content">
+                <h1><%= title %></h1>
+                
+                <header>
+                    <a href="/">Home</a>
+                    <a href="/resources">Resources</a>
+                </header>
+        
+                <p class="hidden">Hello API Event Received</p>
+                <p class="message"><%= message %></p>
+        </div>
 
-        <section>
-            <div class="sidebar">
-                <div class="submenu">
-                    <h3>Request Options</h3>
-                    <ul class="hidden" id="list">
-                    </ul>
+        <footer>
+            <p>Created by taehoshino</p>
+            <p>Github: https://github.com/taehoshino/hellosign_embedded_nodejs</p>
+        </footer>
     
-                </div>
-            </div>
-        </section>
     </body>
-
-    <header>
-        <h1>Hello API Event Received</h1>
-    </header>
-
-    <footer>
-        <p>Created by taehoshino</p>
-        <p>Github: https://github.com/taehoshino/hellosign_embedded_nodejs</p>
-    </footer>
 
 </html>
 
