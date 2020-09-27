@@ -1,10 +1,11 @@
-const {api_key, client_id, signer_email} = require("./config")
+const {api_key, client_id} = require("./config")
 const hellosign = require("hellosign-sdk")({key: api_key})
 const chalk = require("chalk")
 
 
 // Send signature request with file 
-const send_signature_request = (email_address, callback) => {
+const send_signature_request = (email_address, signer_name, callback) => {
+    console.log(email_address, signer_name)
     const options = {
         test_mode: 1,
         clientId: client_id, 
@@ -13,7 +14,7 @@ const send_signature_request = (email_address, callback) => {
         signers: [
             {
                 email_address, 
-                name: "Willy Williams"
+                name: signer_name
             }
         ], 
         files: ["Test.pdf"]
@@ -31,7 +32,7 @@ const send_signature_request = (email_address, callback) => {
 }
 
 // Send signature request with template
-const send_signature_request_with_template = (template_id, email_address, callback) => {
+const send_signature_request_with_template = (template_id, email_address, signer_name, callback) => {
     const options = {
         test_mode: 1, 
         clientId: client_id, 
@@ -41,7 +42,7 @@ const send_signature_request_with_template = (template_id, email_address, callba
         signers: [
             {
                 email_address, 
-                name: "Willy Williams", 
+                name: signer_name, 
                 role: "Signer" 
             }
         ],
@@ -49,7 +50,7 @@ const send_signature_request_with_template = (template_id, email_address, callba
         [
             {
                 "name" : "FullName",
-                "value": "William Williams"
+                "value": signer_name
             }, 
             {
                 "name": "IsRegistered",
@@ -97,13 +98,18 @@ const create_template_draft = (callback) => {
 
 
 // Create embedded unclaimed draft with file
-const create_unclaimed_draft = (email_address, callback) => {
+const create_unclaimed_draft = (email_address, signer_email_address, signer_name, callback) => {
     const options = {
         test_mode: 1,
         clientId: client_id,
         type: "request_signature", //The type of the draft. By default this is "request_signature", but you can set it to "send_document" if you want to self sign a document and download it.
         subject: "Embedded Unclaimed Draft", 
         requester_email_address: email_address, 
+        signers: [{
+            role: "Signer", 
+            email_address: signer_email_address, 
+            name: signer_name
+        }], 
         files: ["Test.pdf"],
         is_for_embedded_signing: 0 // The request created from this draft will also be signable in embedded mode if set to 1. Defaults to 0.
     }
@@ -120,7 +126,7 @@ const create_unclaimed_draft = (email_address, callback) => {
 
 
 // Create embedded unclaimed draft with template
-const create_unclaimed_draft_with_template = (template_id, email_address, callback) => {
+const create_unclaimed_draft_with_template = (template_id, email_address, signer_email_address, signer_name, callback) => {
     const options = {
         test_mode: 1, 
         clientId: client_id, 
@@ -129,8 +135,8 @@ const create_unclaimed_draft_with_template = (template_id, email_address, callba
         requester_email_address: email_address, 
         signers: [{
             role: "Signer", 
-            email_address: signer_email, 
-            name: "Willy Williams"
+            email_address: signer_email_address, 
+            name: signer_name
         }], 
         is_for_embedded_signing: 0
     }

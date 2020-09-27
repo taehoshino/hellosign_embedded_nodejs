@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <%- include('partials/head', {title: "Send"}); -%>
+    <body>
+        <div class="main-content">
+            <h1>Send</h1>
+
+            <%- include('partials/header', {message: "You can send signature request here!"}); -%>
+
+            <form>
+                <input id="requester-email" placeholder="Requester's email address">
+                <input id="signer-name" placeholder="Signer's name">
+                <input id="signer-email" placeholder="Signer's email address">
+                <input id="template-id" placeholder="Template ID">
+                <button>Send</button>
+            </form>
+            <p id="message-1"></p>
+            <p id="message-2"></p>
+            <p id="message-3"></p>
+    
+        </div>
+        
+        <%- include('partials/footer'); -%>
+
+        <script>
+            const type = "send"
+            const urlType = "claim"
+        </script>
+        <script src="/js/frontapp.js"></script>
+    
+    </body>
+</html>

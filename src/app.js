@@ -3,15 +3,9 @@ const http = require("http")
 const express = require("express")
 const morgan = require("morgan")
 const path = require("path")
-const chalk = require("chalk")
 const {send_signature_request, send_signature_request_with_template, create_template_draft, create_unclaimed_draft, create_unclaimed_draft_with_template} = require("./request")
-const {client_id, signer_email, requester_email, template_id} = require("./config")
-const { title } = require("process")
-const { sign } = require("crypto")
+const {client_id} = require("./config")
 
-// assign variables to user input
-const command = process.argv[2]
-const opt = process.argv[3]
 
 // instantiate express
 const app = express()
@@ -28,66 +22,82 @@ app.use(express.static(path.join(__dirname, "../public")))
 // set view engine
 app.set("view engine", "ejs")
 
-// iniitialize urls
-var sign_url = undefined
-var edit_url = undefined
-var claim_url = undefined
 
-const funcRender = (sign_url, edit_url, claim_url) => {
-    app.get("/", (req, res)=>{
-        return res.render("index", {
-            client_id, 
-            sign_url, 
-            edit_url, 
-            claim_url,
-            title: "API Request Options", 
-            message: "This is Hellosign Embedded API testing tool!"
-        })
+// Index page
+app.get("", (req, res)=>{
+    res.render("index", {
     })
-}
+})
 
-// call functions based on user input
-if (command === "send") {
-    if (opt === "template") {
-        send_signature_request_with_template(template_id, signer_email, (sign_url = undefined)=>{
-            funcRender(sign_url, edit_url, claim_url)
-        })
+// API page
+app.get("/api", (req, res)=>{
 
-    } else {
-        send_signature_request(signer_email, (sign_url = undefined)=>{
-            funcRender(sign_url, edit_url, claim_url)
-        })
+    switch (req.query.type) {
+        case "sign":
+            if (!req.query.signer_email || !req.query.signer_name) {
+                res.send({
+                    error: "Please provide signer information."
+                })
+            } else if (req.query.template_id) {
+                send_signature_request_with_template(req.query.template_id, req.query.signer_email, req.query.signer_name, (sign_url = undefined)=>{
+                    res.send({client_id, url: sign_url})
+                })
         
-    }
-
-} else if (command === "unclaimed") {
-    if (opt === "template") {
-        create_unclaimed_draft_with_template(template_id, requester_email, (claim_url = undefined)=>{
-            funcRender(sign_url, edit_url, claim_url)
-        })
-
-    } else {
-        create_unclaimed_draft(requester_email, (claim_url = undefined)=>{
-            funcRender(sign_url, edit_url, claim_url)
-        })
+            } else {
+                send_signature_request(req.query.signer_email, req.query.signer_name, (sign_url = undefined)=>{
+                    res.send({client_id, url: sign_url})
+                })
         
-    }
+            }
+            break
+        
+        case "send":
+            if (!req.query.requester_email || !req.query.signer_email || !req.query.signer_name) {
+                res.send({
+                    error: "Please provide requester and signer information!"
+                })
+            } else if (req.query.template_id) {
+                create_unclaimed_draft_with_template(req.query.template_id,req.query.requester_email,req.query.signer_email,req.query.signer_name,(claim_url=undefined)=>{
+                    res.send({client_id, url: claim_url})
+                })
+            } else {
+                create_unclaimed_draft(req.query.requester_email,req.query.signer_email,req.query.signer_name,(claim_url=undefined)=>{
+                    res.send({client_id, url: claim_url})
+                })
+            }
+            break
 
-} else if (command === "template") {
-    create_template_draft((template_id = undefined, edit_url = undefined)=>{
-        funcRender(sign_url, edit_url, claim_url)
+        case "template":
+            create_template_draft((template_id,edit_url)=>{
+                res.send({client_id, template_id, url: edit_url})
+            })
+
+        default:
+            console.log("Invalid type name!")
+    }
+})
+
+// Sign page 
+app.get("/sign", (req, res)=>{
+    res.render("sign", {
     })
-    
-} else {
-    console.log(chalk.red.inverse("Invalid command value!"))
-    funcRender(sign_url, edit_url, claim_url)
-}
+})
+
+// Send page 
+app.get("/send", (req, res)=>{
+    res.render("send", {
+    })
+})
+
+// Template page 
+app.get("/template", (req, res)=>{
+    res.render("template", {
+    })
+})
 
 // Resouces page
 app.get("/resources", (req, res)=>{
     res.render("resources", {
-        title: "Learning Resources",
-        message: "Here are some useful links." 
     })
 
 })

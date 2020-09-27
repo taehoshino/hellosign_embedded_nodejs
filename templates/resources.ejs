@@ -1,31 +1,15 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/css/style.css">
+    <%- include('partials/head', {title: "Resources"}) -%>
 
-
-        <title>Learning Resources</title>
-        <link rel="icon" href="/img/icon.jpeg">
-
-    </head>
     <body>
         <div class="main-content">
-            <h1><%= title %></h1>
+            <h1>Learning Resources</h1>
 
-            <header>
-                <a href="/">Home</a>
-                <a href="/resources">Resources</a>
-            </header>
+            <%- include('partials/header', {message:  "Here are some useful links."}); -%>
 
-            <p class="hidden">Hello API Event Received</p>    
-            <p><%= message %></p>
         </div>
-        <footer>
-            <p>Created by taehoshino</p>
-            <p>Github: https://github.com/taehoshino/hellosign_embedded_nodejs</p>
-        </footer>
 
+        <%- include('partials/footer') -%>
     </body>
 </html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <%- include('partials/head', {title: "Template"}); -%>
+    <body>
+        <div class="main-content">
+            <h1>Template</h1>
+
+            <%- include('partials/header', {message: "You can create template here."}); -%>
+
+            <form>
+                <button>Create</button>
+            </form>
+            <p id="message-1"></p>
+            <p id="message-2"></p>
+            <p id="message-3"></p>
+    
+        </div>
+        
+        <%- include('partials/footer'); -%>
+
+        <script>
+            const type = "template"
+            const urlType = "edit"
+        </script>
+        <script src="/js/frontapp.js"></script>
+    
+    </body>
+</html>
