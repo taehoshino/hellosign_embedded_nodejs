@@ -138,7 +138,18 @@ const create_unclaimed_draft_with_template = (template_id, email_address, signer
             email_address: signer_email_address, 
             name: signer_name
         }], 
-        is_for_embedded_signing: 0
+        is_for_embedded_signing: 0, 
+        custom_fields: 
+        [
+            {
+                "name" : "FullName",
+                "value": signer_name
+            }, 
+            {
+                "name": "IsRegistered",
+                "value" : true
+            }
+        ]
     }
 
     hellosign.unclaimedDraft.createEmbeddedWithTemplate(options).then(({unclaimed_draft}) => {
